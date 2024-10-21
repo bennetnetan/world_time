@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ChooseLocation extends StatefulWidget {
@@ -9,32 +10,11 @@ class ChooseLocation extends StatefulWidget {
 
 class _ChooseLocationState extends State<ChooseLocation> {
 
-  int wer = 0;
-
-  void getData() async {
-    // simulate a network request for a username
-    String username = await Future.delayed(Duration(seconds: 3), () {
-      return 'Yoshi';
-    });
-
-    // simulate network request ti get bio of the username
-    String bio = await Future.delayed(Duration(seconds: 2), () {
-      return 'Vegan, musician & egg collector';
-    });
-
-    print('$username - $bio');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-    print("Hey there!");
-  }
-
   @override
   Widget build(BuildContext context) {
-    print("Build InitState function run");
+    if (kDebugMode) {
+      print("Build InitState function run");
+    }
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -45,12 +25,8 @@ class _ChooseLocationState extends State<ChooseLocation> {
       ),
       // body: const Text("choose location screen"),
       body: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            wer += 1;
-          });
-        },
-        child: Text('Counter is $wer'),
+        onPressed: () {},
+        child: const Text('Choose location'),
         ),
     );
   }
