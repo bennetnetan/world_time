@@ -11,10 +11,25 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
   int wer = 0;
 
+  void getData() async {
+    // simulate a network request for a username
+    String username = await Future.delayed(Duration(seconds: 3), () {
+      return 'Yoshi';
+    });
+
+    // simulate network request ti get bio of the username
+    String bio = await Future.delayed(Duration(seconds: 2), () {
+      return 'Vegan, musician & egg collector';
+    });
+
+    print('$username - $bio');
+  }
+
   @override
   void initState() {
     super.initState();
-    print("InitState function run");
+    getData();
+    print("Hey there!");
   }
 
   @override
