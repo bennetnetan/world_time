@@ -13,16 +13,24 @@ class _LoadingState extends State<Loading> {
 
     int wer = 0;
 
-  void getData() async {
-    final response = await get(Uri.parse('https://jsonplaceholder.typicode.com/posts/1'));
+  void getTime() async {
+    final response = await get(Uri.parse('http://worldtimeapi.org/api/timezone/Africa/Nairobi'));
     Map data = jsonDecode(response.body) ;
-    print(data['title']);
+    // print(data);
+    // Get properties from data
+    String datetime = data['datetime'];
+    String offset = data['utc_offset'].substring(1,3);
+
+    // Create a datetime object
+    DateTime dt = DateTime.parse(datetime);
+    dt = dt.add(Duration(hours: int.parse(offset)));
+    print(dt);
   }
 
   @override
   void initState() {
     super.initState();
-    getData();
+    getTime();
   }
   @override
   Widget build(BuildContext context) {
