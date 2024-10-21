@@ -14,11 +14,11 @@ class _ChooseLocationState extends State<ChooseLocation> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.blue[900],
-        title: Text("Choose a location", style: TextStyle(color: Colors.white),),
+        title: const Text("Choose a location", style: TextStyle(color: Colors.white),),
         centerTitle: true,
         elevation: 0,
       ),
-      body: Text("choose location screen"),
+      body: const Text("choose location screen"),
     );
   }
 }
