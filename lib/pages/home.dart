@@ -4,7 +4,8 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  // ignore: library_private_types_in_public_api
+  _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
@@ -12,72 +13,85 @@ class _HomeState extends State<Home> {
   Map data = {};
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
-    // Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as Map? ?? {};
+    print(data);
 
-        // Retrieve the arguments passed from the Loading screen
-    final args = ModalRoute.of(context)!.settings.arguments;
-
-    // Check if args is null and handle it
-    if (args == null || args is! Map<String, dynamic>) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Error'),
-        ),
-        body: Center(
-          child: Text('No data available'),
-        ),
-      );
-    }
-
-    // Extract the data from the arguments
-    final Map<String, dynamic> data = args;
-    String location = data['location'];
-    String flag = data['flag'];
-    String time = data['time'];
+    // set background image
+    String bgImage = data['isDaytime'] ? 'day.png' : 'night.png';
+    Color? bgColor = data['isDaytime'] ? Colors.blue : Colors.indigo[700];
 
     return Scaffold(
+      backgroundColor: bgColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0,  120, 0, 0),
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/$bgImage'),
+              fit: BoxFit.cover,
+            )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 120.0, 0, 0),
+            child: Column(
+              children: <Widget>[
+                TextButton.icon(
+                  onPressed: () async {
+                    dynamic result = await Navigator.pushNamed(context, '/location');
+                    setState(() {
+                      data = {
+                        'time': result['time'],
+                        'location': result['location'],
+                        'isDaytime': result['isDaytime'],
+                        'flag': result['flag'],
 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-
-            children: [
-              TextButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/location');
-                }, 
-                label: const Text("Edit location"),
-                icon: const Icon(Icons.edit_location),
+                      };
+                    });
+                  },
+                  icon: Icon(
+                    Icons.edit_location,
+                    color: Colors.grey[300],
+                  ),
+                  label: Text(
+                    'Edit Location',
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                    ),
+                  ),
                 ),
-                SizedBox(height: 20.0,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+                SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
                     Text(
-                      '$location',
+                      data['location'],
                       style: TextStyle(
-                        fontSize: 20.0,
-                        letterSpacing: 2.0
+                        fontSize: 28.0,
+                        letterSpacing: 2.0,
+                        color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      '$time',
-                      style: TextStyle(
-                        fontSize: 50.0,
-                        letterSpacing: 2.0
-                      )
-                      ),
                   ],
                 ),
-            ],
+                SizedBox(height: 20.0),
+                Text(
+                  data['time'],
+                  style: TextStyle(
+                    fontSize: 66.0,
+                    color: Colors.white
+                  )
+                ),
+              ],
+            ),
           ),
-        )
         ),
+      ),
     );
   }
 }
